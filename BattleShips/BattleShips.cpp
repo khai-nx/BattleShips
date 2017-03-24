@@ -6,7 +6,7 @@
 
 int main()
 {
-	MessageBox msg("Message", "title is longer");
+	MessageBox msg("Message\nMessage is longest\nMore text\nMore text", "Title", true);
 	system("PAUSE");
     return 0;
 }

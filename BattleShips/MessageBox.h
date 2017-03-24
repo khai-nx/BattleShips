@@ -1,6 +1,7 @@
 #pragma once
 #include <string>
 #include <iostream>
+#include <sstream>
 #include <vector>
 
 using namespace std;
@@ -24,8 +25,8 @@ private:
 	string* Title;
 	string* Message;
 
-	int FindLargest(vector<string>* stringList);
-	vector<string> BreakLines(string text);
+	int FindLargest(vector<string> stringList);
+	vector<string> BreakLines(string* text);
 
 	string GenerateLine(int msgLength, char c);
 	string GenerateTitle(int msgLength);
