@@ -1,13 +1,11 @@
-// BattleShips.cpp : Defines the entry point for the console application.
-//
-
 #include "stdafx.h"
-#include "MessageBox.h"
+#include "TextMessage.h"
+#include "BattleGrid.h"
 
 int main()
 {
-	MessageBox msg("Message\nMessage is longest\nMore text\nMore text", "Title", true);
-	system("PAUSE");
+	//TextMessage msg(28,8, "I like trains\nEveryone should too  \nBecause they are cool", "Title", true);
+	BattleGrid grid(0,0, 8);
+	cin.get();
     return 0;
 }
-
