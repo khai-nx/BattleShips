@@ -1,44 +1,55 @@
 #include "stdafx.h"
 #include "BattleGrid.h"
 
-BattleGrid::BattleGrid(int x, int y, int size)
+BattleGrid::BattleGrid(int x, int y, const int* size)
 {
-	HANDLE hStdout = GetStdHandle(STD_OUTPUT_HANDLE);
+	COORD destCoord;
+	destCoord.X = x;
+	destCoord.Y = y;
+
 	SetConsoleTextAttribute(hStdout, ColorHighlight);
+	SetConsoleCursorPosition(hStdout, destCoord);
 
-	string delimiter((size + 1) * 4 - 4, '-');
+	string delimiter((*size + 1) * 4 - 4, '-');
 
-	for (int i = 0; i <= size; i++) cout << i << " | ";
+	for (int i = 0; i <= *size; i++) cout << i << "  ";
 
-	cout << "\n---" << delimiter << " \n";
+	destCoord.Y += 2;
+	SetConsoleCursorPosition(hStdout, destCoord);
 
-	for (int i = 0; i <= size; i++)
+	for (int i = 0; i < *size; i++)
 	{
 		SetConsoleTextAttribute(hStdout, ColorHighlight);
-		cout << char(i + 65) << " |";
+		cout << char(i + 65) << ' ';
 
 		SetConsoleTextAttribute(hStdout, ColorDefault);
-		cout << " ";
+		cout << ' ';
 
 		vector<COORD> row;
 
-		for (int j = 0; j < size; j++)
+		for (int j = 0; j < *size; j++)
 		{
 			COORD pos;
-			pos.X = 4 * (j + 1);
-			pos.Y = 2 * (i + 1);
-
+			pos.X = x + (3 * (j + 1));
+			pos.Y = y + (2 * (i + 1));
 			
 			row.push_back(pos);
-			cout << ' ' << " | ";
+			cout << ' ';
 		}
 		
 		Grid.push_back(row);
 
-		SetConsoleTextAttribute(hStdout, ColorHighlight);
-		cout << "\n---";
-
-		SetConsoleTextAttribute(hStdout, ColorDefault);
-		cout << delimiter << "\n";
+		destCoord.Y += 2;
+		SetConsoleCursorPosition(hStdout, destCoord);
 	}
+	
  }
+
+void BattleGrid::FillGrid(vector<COORD>* grid)
+{
+	for (int j = 0; j < grid->size(); j++)
+	{
+		SetConsoleCursorPosition(hStdout, (*grid)[j]);
+		cout << 'x';
+	}
+}

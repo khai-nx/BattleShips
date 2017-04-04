@@ -1,5 +1,9 @@
-﻿  BattleGrid.cpp
-c:\users\denis\documents\visual studio 2017\projects\battleships\battleships\battlegrid.cpp(45): warning C4018: '<': signed/unsigned mismatch
-c:\users\denis\documents\visual studio 2017\projects\battleships\battleships\battlegrid.cpp(51): warning C4018: '<': signed/unsigned mismatch
+﻿  Game.cpp
+  BattleGrid.cpp
+c:\users\denis\documents\visual studio 2017\projects\battleships\battleships\battlegrid.cpp(50): warning C4018: '<': signed/unsigned mismatch
+  Generating Code...
+  Compiling...
+  BattleShips.cpp
+  Generating Code...
   BattleShips.vcxproj -> C:\Users\Denis\documents\visual studio 2017\Projects\BattleShips\Debug\BattleShips.exe
   BattleShips.vcxproj -> C:\Users\Denis\documents\visual studio 2017\Projects\BattleShips\Debug\BattleShips.pdb (Partial PDB)

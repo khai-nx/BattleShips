@@ -10,5 +10,6 @@ public:
 private:
 	const char Alive = 'x';
 	const char Dead = '@';
+	ShipClass();
 };
 
