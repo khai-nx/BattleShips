@@ -10,6 +10,7 @@ class BattleGrid
 public:
 	BattleGrid(int x, int y, const int *size);
 	void FillGrid(vector<COORD>* grid);
+	COORD GetCenter();
 	vector<vector<COORD>> Grid;
 
 private:

@@ -10,9 +10,17 @@ BattleGrid::BattleGrid(int x, int y, const int* size)
 	SetConsoleTextAttribute(hStdout, ColorHighlight);
 	SetConsoleCursorPosition(hStdout, destCoord);
 
-	string delimiter((*size + 1) * 4 - 4, '-');
-
-	for (int i = 0; i <= *size; i++) cout << i << "  ";
+	for (int i = 0; i <= *size; i++)
+	{
+		if (i == 0)
+		{
+			cout << "   ";
+		}
+		else
+		{
+			cout << i << "  ";
+		}
+	}
 
 	destCoord.Y += 2;
 	SetConsoleCursorPosition(hStdout, destCoord);
@@ -21,9 +29,6 @@ BattleGrid::BattleGrid(int x, int y, const int* size)
 	{
 		SetConsoleTextAttribute(hStdout, ColorHighlight);
 		cout << char(i + 65) << ' ';
-
-		SetConsoleTextAttribute(hStdout, ColorDefault);
-		cout << ' ';
 
 		vector<COORD> row;
 
@@ -42,7 +47,6 @@ BattleGrid::BattleGrid(int x, int y, const int* size)
 		destCoord.Y += 2;
 		SetConsoleCursorPosition(hStdout, destCoord);
 	}
-	
  }
 
 void BattleGrid::FillGrid(vector<COORD>* grid)
@@ -53,3 +57,11 @@ void BattleGrid::FillGrid(vector<COORD>* grid)
 		cout << 'x';
 	}
 }
+
+COORD BattleGrid::GetCenter()
+{
+	int index = (int)(Grid.size() / 2 - 1);
+
+	return Grid[index][index];
+}
+
