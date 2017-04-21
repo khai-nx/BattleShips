@@ -6,20 +6,48 @@
 Game::Game()
 {
 	BattleGrid gridA(1, 0, &gridSize);
-	TextMessage(55, 1, "Place your ships    \nusing arrow keys.   \n\nUse Q and E to\ncycle through ships.\n\nBATTLESHIP\nCRUISER\nSUBMARINE\nDESTROYER", "Instructions", true);
+	TextMessage(53, 1, "Place your ships    \nusing arrow keys.   \n\nUse Q and E to\ncycle through ships.\n\nBATTLESHIP\nCRUISER\nSUBMARINE\nDESTROYER", "Instructions", true);
 
-	cursorPos.X = 75;
+	cursorPos.X = 73;
 	cursorPos.Y = 9;
 
-	UpdateShipCount(71, 9, Ships);
+	UpdateShipCount(68, 9, Ships);
 	UpdateCursor(cursorPos.X, cursorPos.Y, '<');
 
-	SetConsoleCursorPosition(hStdout, gridA.GetCenter());
+	centerPos = gridA.GetCenter();
+	lastPos = centerPos;
+	SetConsoleCursorPosition(hStdout, centerPos);
 
-	CreateShips();
+	CreateShips(&gridA);
 }
 
-void Game::CreateShips()
+int Game::GetCode()
+{
+	int code = getch();
+
+	if (code == 0 || code == 224) code = 256 + getch();
+
+	return code;
+}
+
+bool operator ==(COORD const& lhs, COORD const& rhs)
+{
+	return lhs.X == rhs.X && lhs.Y == rhs.Y;
+}
+
+bool Game::CheckContains(vector<COORD>* grid, COORD * pos)
+{
+	if (count(grid->begin(), grid->end(), *pos) != 0)
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
+
+void Game::CreateShips(BattleGrid* grid)
 {
 	int numberOfShips = 0;
 	int character;
@@ -33,14 +61,59 @@ void Game::CreateShips()
 
 		switch (character)
 		{
+		case KEY_ENTER:
+			if (!CheckContains(&ShipCoordinates, &lastPos))
+			{
+				ShipCoordinates.push_back(lastPos);
+				lastPos = centerPos;
+				SetConsoleCursorPosition(hStdout, centerPos);
+			}
+			break;
+
 		case ARROW_UP:
+			// Move ship up
+			if (lastPos.Y != grid->Y + 2)
+			{
+				grid->ClearGrid();
+				grid->FillGrid(&ShipCoordinates);
+				lastPos.Y -= 2;
+				DrawShip(&lastPos, &ShipCoordinates);
+			}
 			break;
+
 		case ARROW_DOWN:
+			// Move ship down
+			if (lastPos.Y != grid->Y + grid->Grid.size() * 2)
+			{
+				grid->ClearGrid();
+				grid->FillGrid(&ShipCoordinates);
+				lastPos.Y += 2;
+				DrawShip(&lastPos, &ShipCoordinates);
+			}
 			break;
+
 		case ARROW_LEFT:
+			// Move ship left
+			if (lastPos.X != grid->X + 3)
+			{
+				grid->ClearGrid();
+				grid->FillGrid(&ShipCoordinates);
+				lastPos.X -= 3;
+				DrawShip(&lastPos, &ShipCoordinates);
+			}
 			break;
+
 		case ARROW_RIGHT:
+			// Move ship right
+			if (lastPos.X != grid->X + grid->Grid.size() * 3)
+			{
+				grid->ClearGrid();
+				grid->FillGrid(&ShipCoordinates);
+				lastPos.X += 3;
+				DrawShip(&lastPos, &ShipCoordinates);
+			}
 			break;
+
 		case KEY_Q:
 		case KEY_q:
 			if (cursorPos.Y != 9)
@@ -49,9 +122,16 @@ void Game::CreateShips()
 				cout << ' ';
 				cursorPos.Y--;
 				UpdateCursor(cursorPos.X, cursorPos.Y, '<');
-				//SetConsoleCursorPosition(hStdout, gridA.GetCenter());
+				SetConsoleCursorPosition(hStdout, lastPos);
+				Beep(523, 120);
+			}
+			else
+			{
+				Beep(440, 100);
+				Beep(395, 125);
 			}
 			break;
+
 		case KEY_E:
 		case KEY_e:
 			if (cursorPos.Y != 12)
@@ -60,22 +140,30 @@ void Game::CreateShips()
 				cout << ' ';
 				cursorPos.Y++;
 				UpdateCursor(cursorPos.X, cursorPos.Y, '<');
-				//SetConsoleCursorPosition(hStdout, gridA.GetCenter());
+				SetConsoleCursorPosition(hStdout, lastPos);
+				Beep(523, 120);
+			}
+			else
+			{
+				Beep(440, 100);
+				Beep(395, 125);
 			}
 			break;
-		default:
+
+		case KEY_R:
+		case KEY_r:
+			// Rotate ship
+			lastPos = centerPos;
 			break;
 		}
 	}
 }
 
-int Game::GetCode()
+void Game::DrawShip(COORD* pos, vector<COORD>* existingShips)
 {
-	int code = getch();
-
-	if (code == 0 || code == 224) code = 256 + getch();
-
-	return code;
+	SetConsoleCursorPosition(hStdout, *pos);
+	SetConsoleTextAttribute(hStdout, CheckContains(existingShips, pos) == true ? 12 : 14);
+	cout << "x";
 }
 
 void Game::UpdateShipCount(int x, int y, int ships[])
@@ -135,3 +223,4 @@ void Game::End()
 
 	TextMessage endGameMessage(0, 0, msg, "Game over!");
 }
+

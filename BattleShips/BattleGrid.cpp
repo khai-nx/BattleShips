@@ -7,6 +7,9 @@ BattleGrid::BattleGrid(int x, int y, const int* size)
 	destCoord.X = x;
 	destCoord.Y = y;
 
+	X = x;
+	Y = y;
+
 	SetConsoleTextAttribute(hStdout, ColorHighlight);
 	SetConsoleCursorPosition(hStdout, destCoord);
 
@@ -51,10 +54,23 @@ BattleGrid::BattleGrid(int x, int y, const int* size)
 
 void BattleGrid::FillGrid(vector<COORD>* grid)
 {
+	SetConsoleTextAttribute(hStdout, 15);
 	for (int j = 0; j < grid->size(); j++)
 	{
 		SetConsoleCursorPosition(hStdout, (*grid)[j]);
 		cout << 'x';
+	}
+}
+
+void BattleGrid::ClearGrid()
+{
+	for (int x = 0; x < Grid.size(); x++)
+	{
+		for (int y = 0; y < Grid.size(); y++)
+		{
+			SetConsoleCursorPosition(hStdout, Grid[y][x]);
+			cout << ' ';
+		}
 	}
 }
 

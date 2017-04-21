@@ -10,8 +10,12 @@ class BattleGrid
 public:
 	BattleGrid(int x, int y, const int *size);
 	void FillGrid(vector<COORD>* grid);
+	void ClearGrid();
 	COORD GetCenter();
 	vector<vector<COORD>> Grid;
+
+	int X;
+	int Y;
 
 private:
 	const HANDLE hStdout = GetStdHandle(STD_OUTPUT_HANDLE);
