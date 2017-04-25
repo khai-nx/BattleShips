@@ -22,10 +22,6 @@ private:
 		ARROW_DOWN = 256 + 80,
 		ARROW_LEFT = 256 + 75,
 		ARROW_RIGHT = 256 + 77,
-		KEY_Q = 81,
-		KEY_q = 113,
-		KEY_E = 69,
-		KEY_e = 101,
 		KEY_R = 82,
 		KEY_r = 114
 	};
@@ -36,15 +32,11 @@ private:
 
 	int scorePlayer;
 	int scoreCpu;
-	int SelectedShip = 2;
-	//map<int, short> Ships = { {4, 1}, {3, 2}, {2, 3}, {1, 4} };
-	int Ships[2][4] = { { 4, 3, 2, 1 },
-						{ 1, 2, 3, 4 } };
+	int PlayerShips;
+	int CPUShips;
 
-	bool IsHorizontal = true;
-
-	vector<COORD> ShipCoordinates;
-	COORD cursorPos;
+	vector<COORD> PlayerShipCoordinates;
+	vector<COORD> CPUShipCoordinates;
 	COORD centerPos;
 	COORD lastPos;
 	#pragma endregion
@@ -59,8 +51,10 @@ private:
 	void CreateShips(BattleGrid* grid);
 	void DrawShip(COORD* pos, vector<COORD>* existingShips);
 	void UpdateShipCount(int x, int y);
-	void UpdateCursor(int x, int y, char cursor);
 	void UpdateScoreboard(int x, int y);
+
+	void AttackCPU(BattleGrid* grid);
+	void AttackPlayer(BattleGrid* grid);
 	#pragma endregion
 };
 
