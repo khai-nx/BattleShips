@@ -272,9 +272,6 @@ void Game::CreateShips(BattleGrid* grid)
 
 void Game::DrawShip(COORD* pos, vector<COORD>* existingShips)
 {
-	/*SetConsoleCursorPosition(hStdout, *pos);
-	SetConsoleTextAttribute(hStdout, CheckContains(existingShips, pos) == true ? 12 : 14);
-	cout << "x";*/
 	Ship(pos, true);
 }
 #pragma endregion
