@@ -15,14 +15,8 @@ BattleGrid::BattleGrid(int x, int y, const int* size)
 
 	for (int i = 0; i <= *size; i++)
 	{
-		if (i == 0)
-		{
-			cout << "   ";
-		}
-		else
-		{
-			cout << i << "  ";
-		}
+		if (i == 0)	cout << "   ";
+		else cout << i << "  ";
 	}
 
 	destCoord.Y += 2;

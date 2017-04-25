@@ -3,7 +3,7 @@
 #include <conio.h>
 #include <Windows.h>
 #include <vector>
-#include <algorithm>
+#include <map>
 #include "BattleGrid.h"
 
 using namespace std;
@@ -30,28 +30,37 @@ private:
 		KEY_r = 114
 	};
 
-	const int gridSize = 8;
-	
+	#pragma region Properties
+	const HANDLE hStdout = GetStdHandle(STD_OUTPUT_HANDLE);
+	const int gridSize = 7;
+
 	int scorePlayer;
 	int scoreCpu;
-	int Ships[4]{ 1, 2, 3, 4 };
+	int SelectedShip = 2;
+	//map<int, short> Ships = { {4, 1}, {3, 2}, {2, 3}, {1, 4} };
+	int Ships[2][4] = { { 4, 3, 2, 1 },
+						{ 1, 2, 3, 4 } };
+
+	bool IsHorizontal = true;
 
 	vector<COORD> ShipCoordinates;
-
-	const HANDLE hStdout = GetStdHandle(STD_OUTPUT_HANDLE);
 	COORD cursorPos;
 	COORD centerPos;
 	COORD lastPos;
+	#pragma endregion
 
+	#pragma region Methods
 	int GetCode();
 	bool CheckContains(vector<COORD>* grid, COORD* pos);
 
 	void Start();
 	void End();
+	void Ship(COORD* pos, bool highlight);
 	void CreateShips(BattleGrid* grid);
 	void DrawShip(COORD* pos, vector<COORD>* existingShips);
-	void UpdateShipCount(int x, int y, int ships[]);
+	void UpdateShipCount(int x, int y);
 	void UpdateCursor(int x, int y, char cursor);
 	void UpdateScoreboard(int x, int y);
+	#pragma endregion
 };
 

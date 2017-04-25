@@ -1,15 +1,14 @@
 #pragma once
 #include <vector>
+#include <Windows.h>
 using namespace std;
 
 class ShipClass
 {
 public:
-	vector<char> Body;
+	vector<COORD> Body;
 
 private:
-	const char Alive = 'x';
-	const char Dead = '@';
 	ShipClass();
 };
 
