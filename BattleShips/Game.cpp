@@ -1,10 +1,11 @@
-#include "stdafx.h"
+﻿#include "stdafx.h"
 #include "Game.h"
 #include "BattleGrid.h"
 #include "TextMessage.h"
 
 Game::Game()
 {
+	// Vykreslení uživatelského rozhraní
 	BattleGrid gridA(1, 0, &gridSize);
 	TextMessage(53, 1, "Place your ships    \nusing arrow keys.   \n\nRestart using R\n\nShips:", "Instructions", true);
 
@@ -16,10 +17,13 @@ Game::Game()
 	lastPos = centerPos;
 	Ship(&centerPos, false);
 
-	CreateShips(&gridA);
+	// Volba pozic lodí
+	PlayerCreateShips(&gridA);
 
+	// Vyčistí obrazovku
 	system("cls");
 
+	// Zahájí hru
 	Start();
 }
 
@@ -30,6 +34,15 @@ int Game::GetCode()
 	if (code == 0 || code == 224) code = 256 + _getch();
 
 	return code;
+}
+
+int Game::GetRandom(const int * max)
+{
+	random_device rd;
+	mt19937 rng(rd());
+	uniform_int_distribution<int> uni(0, *max - 1); 
+
+	return uni(rng);
 }
 
 bool operator ==(COORD const& lhs, COORD const& rhs)
@@ -51,9 +64,8 @@ void Game::Ship(COORD* pos, bool highlight)
 	cout << 'x';
 }
 
-void Game::CreateShips(BattleGrid* grid)
+void Game::PlayerCreateShips(BattleGrid* grid)
 {
-	int numberOfShips = 8;
 	int character;
 
 	while (PlayerShips!= 0)
@@ -93,7 +105,7 @@ void Game::CreateShips(BattleGrid* grid)
 				grid->ClearGrid();
 				grid->FillGrid(&PlayerShipCoordinates);
 				lastPos.Y -= 2;
-				DrawShip(&lastPos, &PlayerShipCoordinates);
+				Ship(&lastPos, true);
 				Beep(523, 120);
 			}
 			else
@@ -110,7 +122,7 @@ void Game::CreateShips(BattleGrid* grid)
 				grid->ClearGrid();
 				grid->FillGrid(&PlayerShipCoordinates);
 				lastPos.Y += 2;
-				DrawShip(&lastPos, &PlayerShipCoordinates);
+				Ship(&lastPos, true);
 				Beep(523, 120);
 			}
 			else
@@ -127,7 +139,7 @@ void Game::CreateShips(BattleGrid* grid)
 				grid->ClearGrid();
 				grid->FillGrid(&PlayerShipCoordinates);
 				lastPos.X -= 3;
-				DrawShip(&lastPos, &PlayerShipCoordinates);
+				Ship(&lastPos, true);
 				Beep(523, 120);
 			}
 			else
@@ -144,7 +156,7 @@ void Game::CreateShips(BattleGrid* grid)
 				grid->ClearGrid();
 				grid->FillGrid(&PlayerShipCoordinates);
 				lastPos.X += 3;
-				DrawShip(&lastPos, &PlayerShipCoordinates);
+				Ship(&lastPos, true);
 				Beep(523, 120);
 			}
 			else
@@ -166,9 +178,18 @@ void Game::CreateShips(BattleGrid* grid)
 	}
 }
 
-void Game::DrawShip(COORD* pos, vector<COORD>* existingShips)
+void Game::CPUCreateShips(BattleGrid * grid)
 {
-	Ship(pos, true);
+	COORD* save;
+
+	for (int i = 0; i < CPUShips; i++)
+	{
+		save = &grid->Grid[GetRandom(&gridSize)][GetRandom(&gridSize)];
+
+		if (CheckContains(&CPUShipCoordinates, save))
+			CPUShipCoordinates.push_back(*save);
+		else i--;
+	}
 }
 #pragma endregion
 
@@ -196,9 +217,12 @@ void Game::UpdateScoreboard(int x, int y)
 #pragma region Game Logic
 void Game::AttackCPU(BattleGrid* grid)
 {
+	bool selected = false;
 	int character;
 
-	while (true)
+	Ship(&centerPos, false);
+
+	while (!selected)
 	{
 		character = GetCode();
 
@@ -207,11 +231,20 @@ void Game::AttackCPU(BattleGrid* grid)
 		case KEY_ENTER:
 			if (CheckContains(&CPUShipCoordinates, &lastPos))
 			{
-
+				ScorePlayer++;
+				Beep(523, 120);
+				selected = true;
+			}
+			else if (!CheckContains(&CPUMissCoordinates, &lastPos)
+				 && !(CheckContains(&CPUHitCoordinates, &lastPos)))
+			{
+				Beep(523, 120);
+				selected = true;
 			}
 			else
 			{
-
+				Beep(440, 100);
+				Beep(395, 125);
 			}
 			break;
 		case ARROW_UP:
@@ -276,7 +309,11 @@ void Game::AttackCPU(BattleGrid* grid)
 
 void Game::AttackPlayer(BattleGrid* grid)
 {
-
+	COORD* pos = &grid->Grid[GetRandom(&gridSize)][GetRandom(&gridSize)];
+	while (!CheckContains(&PlayerShipCoordinates, pos))
+	{
+		pos = &grid->Grid[GetRandom(&gridSize)][GetRandom(&gridSize)];
+	}
 }
 #pragma endregion
 
@@ -284,10 +321,12 @@ void Game::AttackPlayer(BattleGrid* grid)
 void Game::Start()
 {
 	BattleGrid gridA(1, 0, &gridSize);
+	CPUShips = 10;
 	gridA.FillGrid(&PlayerShipCoordinates);
 
 	BattleGrid gridB(78 - gridSize * 3, 0, &gridSize);
-	gridB.FillGrid(&CPUShipCoordinates);
+	CPUCreateShips(&gridB);
+	//gridB.FillGrid(&CPUShipCoordinates); //Uncomment this line to check if grid was filled.
 
 	TextMessage scoreTable(33, 8, "You   CPU\n 1  -  0 ", "Score", true);
 
@@ -301,18 +340,20 @@ void Game::Start()
 	centerPos = gridB.GetCenter();
 	lastPos = centerPos;
 
+	AttackCPU(&gridB);
+
 	while (PlayerShips != 0 || CPUShips != 0)
 	{
-		AttackCPU(&gridB);
-		//AttackPlayer(&gridA);
+		AttackCPU(&gridB);		// The user attacks the CPU's grid.
+		//AttackPlayer(&gridA); // The CPU attacks the user's grid.
 	}
 }
 
 void Game::End()
 {
 	string msg =
-		scorePlayer > scoreCpu ? "You won!" :
-		scorePlayer < scoreCpu ? "You lost!" :
+		ScorePlayer > ScoreCpu ? "You won!" :
+		ScorePlayer < ScoreCpu ? "You lost!" :
 		"It's a tie!";
 
 	TextMessage endGameMessage(0, 0, msg, "Game over!");
