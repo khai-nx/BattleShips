@@ -11,7 +11,7 @@ public:
 	BattleGrid(int x, int y, const int *size);
 
 	#pragma region Methods
-	void FillGrid(vector<COORD>* grid);
+	void FillGrid(vector<COORD>* grid, const char* c);
 	void ClearGrid();
 	#pragma endregion
 

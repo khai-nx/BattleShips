@@ -46,13 +46,13 @@ BattleGrid::BattleGrid(int x, int y, const int* size)
 	}
  }
 
-void BattleGrid::FillGrid(vector<COORD>* grid)
+void BattleGrid::FillGrid(vector<COORD>* grid, const char* c)
 {
 	SetConsoleTextAttribute(hStdout, 15);
 	for (int j = 0; j < grid->size(); j++)
 	{
 		SetConsoleCursorPosition(hStdout, (*grid)[j]);
-		cout << 'x';
+		cout << *c;
 	}
 }
 

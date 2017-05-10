@@ -36,6 +36,10 @@ private:
 
 	// Zde jsou vlastnosti
 	#pragma region Properties
+	const char Ship = 'x';
+	const char Hit = '@';
+	const char Miss = 'o';
+
 	// Ovladač konzole, který je nutný pro změnu barvy a pozice kurzoru.
 	const HANDLE hStdout = GetStdHandle(STD_OUTPUT_HANDLE);
 
@@ -79,8 +83,8 @@ private:
 	// Metoda ukočuje hru
 	void End();
 
-	// Metoda kreslí na herní pole jednu loď
-	void Ship(COORD* pos, bool highlight);
+	// Metoda kreslí na herní pole jednu figurku
+	void Draw(COORD * pos, int color, const char * c);
 
 	// Metoda žádá uživatele o zaplnění pole loděmi
 	void PlayerCreateShips(BattleGrid* grid);
