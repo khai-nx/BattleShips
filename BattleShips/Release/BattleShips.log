@@ -1,0 +1,15 @@
+﻿  stdafx.cpp
+  BattleGrid.cpp
+BattleGrid.cpp(52): warning C4018: '<': signed/unsigned mismatch
+BattleGrid.cpp(61): warning C4018: '<': signed/unsigned mismatch
+BattleGrid.cpp(63): warning C4018: '<': signed/unsigned mismatch
+  BattleShips.cpp
+  Game.cpp
+  TextMessage.cpp
+TextMessage.cpp(116): warning C4018: '<': signed/unsigned mismatch
+TextMessage.cpp(186): warning C4018: '<': signed/unsigned mismatch
+TextMessage.cpp(188): warning C4018: '>': signed/unsigned mismatch
+  Generating code
+  Finished generating code
+  All 444 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+  BattleShips.vcxproj -> C:\Users\Denis\documents\visual studio 2017\Projects\BattleShips\Release\BattleShips.exe

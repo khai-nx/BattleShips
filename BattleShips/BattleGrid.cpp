@@ -46,9 +46,9 @@ BattleGrid::BattleGrid(int x, int y, const int* size)
 	}
  }
 
-void BattleGrid::FillGrid(vector<COORD>* grid, const char* c)
+void BattleGrid::FillGrid(vector<COORD>* grid, const char* c, int color)
 {
-	SetConsoleTextAttribute(hStdout, 15);
+	SetConsoleTextAttribute(hStdout, color);
 	for (int j = 0; j < grid->size(); j++)
 	{
 		SetConsoleCursorPosition(hStdout, (*grid)[j]);

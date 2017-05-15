@@ -34,8 +34,17 @@ private:
 		KEY_r = 114
 	};
 
+	enum
+	{
+		COLOR_WHITE = 15,
+		COLOR_YELLOW = 14,
+		COLOR_RED = 12,
+		COLOR_BLUE = 9
+	};
+
 	// Zde jsou vlastnosti
 	#pragma region Properties
+
 	const char Ship = 'x';
 	const char Hit = '@';
 	const char Miss = 'o';
@@ -46,8 +55,8 @@ private:
 	// Velikost herního pole.
 	const int gridSize = 7;
 
-	int ScorePlayer;
-	int ScoreCpu;
+	int ScorePlayer = 0;
+	int ScoreCpu = 0;
 	int PlayerShips;
 	int CPUShips;
 
@@ -63,10 +72,12 @@ private:
 
 	COORD centerPos;	// Sem se ukládá středová pozice mřížky
 	COORD lastPos;		// Sem se ukládá poslední nastavená pozice kurzoru
+	
 	#pragma endregion
 
 	// Zde jsou metody (funkce)
 	#pragma region Methods
+
 	// Metoda vrací číselnou hodnotu zmáčknuté klávesy
 	int GetCode();
 
@@ -103,6 +114,7 @@ private:
 
 	// Metoda náhodně zvolí místo útoku
 	void AttackPlayer(BattleGrid* grid);
+
 	#pragma endregion
 };
 
