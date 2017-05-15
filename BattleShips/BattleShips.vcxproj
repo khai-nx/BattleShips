@@ -140,7 +140,6 @@
   <ItemGroup>
     <ClInclude Include="BattleGrid.h" />
     <ClInclude Include="Game.h" />
-    <ClInclude Include="ShipClass.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
     <ClInclude Include="TextMessage.h" />
@@ -149,7 +148,6 @@
     <ClCompile Include="BattleGrid.cpp" />
     <ClCompile Include="BattleShips.cpp" />
     <ClCompile Include="Game.cpp" />
-    <ClCompile Include="ShipClass.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
